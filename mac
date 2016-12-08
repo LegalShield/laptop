@@ -133,8 +133,7 @@ brew "htop"
 brew "watch"
 
 # Docker
-brew "docker"
-brew "boot2docker"
+cask "docker"
 
 # GitHub
 brew "hub"
@@ -152,8 +151,6 @@ brew "node-build"
 brew "rbenv"
 brew "ruby-build"
 EOF
-
-boot2docker init
 
 fancy_echo "Configuring Ruby ..."
 find_latest_ruby() {
