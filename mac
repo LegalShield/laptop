@@ -134,6 +134,7 @@ brew "watch"
 
 # Docker
 cask "docker"
+cask "vagrant"
 
 # GitHub
 brew "hub"
