@@ -152,13 +152,11 @@ brew "rbenv"
 brew "ruby-build"
 
 # Databases
-# running these from docker
-# brew "postgres", restart_service: true
-# brew "redis", restart_service: true
-# brew "rabbitmq", restart_service: true
-# brew "mongodb", restart_service: true
+brew "postgres", restart_service: true
+brew "redis", restart_service: true
+brew "rabbitmq", restart_service: true
+brew "mongodb", restart_service: true
 EOF
-
 
 fancy_echo "Configuring Ruby ..."
 find_latest_ruby() {
