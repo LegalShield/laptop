@@ -89,18 +89,9 @@ if brew list | grep -Fq brew-cask; then
   brew uninstall --force brew-cask
 fi
 
-fancy_echo "Ensure brew bundle ..."
-brew tap Homebrew/bundle
-
-# Ensure ~/.Brewfile is symlinked correctly
-#BASEDIR = "$(dirname "$0")"
-#if [[ -L ~/.Brewfile ]] && [[ "$(readlink ~/.Brewfile)" != "$($BASEDIR/Brewfile)" ]]; then
-fancy_echo "Linking Brewfile..."
-ln -s "$BASEDIR/Brewfile" ~/.Brewfile
-#fi
-
 fancy_echo "Updating Homebrew formulae ..."
 brew update
+brew tap Homebrew/bundle
 brew bundle --file=- <<EOF
 tap "homebrew/services"
 tap 'caskroom/cask'
