@@ -134,6 +134,7 @@ brew "watch"
 
 # Docker
 brew "docker"
+brew "boot2docker"
 
 # GitHub
 brew "hub"
@@ -150,13 +151,9 @@ brew "nodenv"
 brew "node-build"
 brew "rbenv"
 brew "ruby-build"
-
-# Databases
-brew "postgres", restart_service: true
-brew "redis", restart_service: true
-brew "rabbitmq", restart_service: true
-brew "mongodb", restart_service: true
 EOF
+
+boot2docker init
 
 fancy_echo "Configuring Ruby ..."
 find_latest_ruby() {
