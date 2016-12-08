@@ -113,6 +113,7 @@ cask "spectacle"
 cask "karabiner"
 
 # Unix
+brew "ctags"
 brew "git"
 brew "openssl"
 brew "reattach-to-user-namespace"
@@ -136,7 +137,7 @@ brew "hub"
 brew "imagemagick"
 
 # Testing
-brew "qt"
+# brew "qt" # not currently supported on Sierra
 
 # Programming languages
 brew "maven"
