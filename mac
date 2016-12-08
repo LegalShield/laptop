@@ -93,8 +93,9 @@ fancy_echo "Updating Homebrew formulae ..."
 brew update
 brew tap Homebrew/bundle
 brew bundle --file=- <<EOF
+tap "homebrew/dupes"
 tap "homebrew/services"
-tap 'caskroom/cask'
+tap "caskroom/cask"
 
 # Casks
 cask "java" unless system '/usr/libexec/java_home --failfast'
@@ -147,8 +148,9 @@ brew "rbenv"
 brew "ruby-build"
 
 # Databases
-brew "postgres", restart_service: true
-brew "redis", restart_service: true
-brew "rabbitmq", restart_service: true
-brew "mongodb", restart_service: true
+# running these from docker
+# brew "postgres", restart_service: true
+# brew "redis", restart_service: true
+# brew "rabbitmq", restart_service: true
+# brew "mongodb", restart_service: true
 EOF
