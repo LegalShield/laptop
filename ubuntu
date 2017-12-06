@@ -138,8 +138,14 @@ node-build_install() {
   ./install.sh
 }
 
-skype_install() {
-
+intellij_install() {
+  cd /tmp
+  url="https://download.jetbrains.com/idea/"
+  file="ideaIU-2017.3.tar.gz"
+  wget "${url}${file}"
+  tar -zxvf "${file}"
+  rm "${file}"
+  cd ~
 }
 
 # Basics
