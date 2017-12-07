@@ -4,12 +4,6 @@
 # Be prepared to turn your laptop (or desktop, no haters here)
 # into an awesome development machine.
 
-# Make sure the script is running as root.
-#if [ "$UID" -ne "0" ]; then
-#    echo "You must be root to run $0. Try following"; echo "sudo $0";
-#    exit 9
-#fi
-
 fancy_echo() {
   local fmt="$1"; shift
 
@@ -35,30 +29,6 @@ append_to_zshrc() {
     fi
   fi
 }
-
-# shellcheck disable=SC2154
-trap 'ret=$?; test $ret -ne 0 && printf "failed\n\n" >&2; exit $ret' EXIT
-
-set -e
-
-if [ ! -d "$HOME/.bin/" ]; then
-  mkdir "$HOME/.bin"
-fi
-
-if [ ! -f "$HOME/.zshrc" ]; then
-  touch "$HOME/.zshrc"
-fi
-
-# shellcheck disable=SC2016
-append_to_zshrc 'export PATH="$HOME/.bin:$PATH"'
-
-case "$SHELL" in
-  */zsh) : ;;
-  *)
-    fancy_echo "Changing your shell to zsh ..."
-      chsh -s "$(which zsh)"
-    ;;
-esac
 
 gem_install_or_update() {
   if gem list "$1" --installed > /dev/null; then
@@ -96,7 +66,7 @@ postman_install() {
   wget "${url}" -O "${file}"
   tar -xzf "${file}" -C /opt
   rm "${file}""
-  ln -sf /opt/Postman/Postman /usr/bin/postman
+  ln -sf /opt/Postman/Postman /usr/local/bin/postman
   cd ~
 }
 
@@ -150,7 +120,33 @@ intellij_install() {
   cd ~
 }
 
+# shellcheck disable=SC2154
+trap 'ret=$?; test $ret -ne 0 && printf "failed\n\n" >&2; exit $ret' EXIT
+
+set -e
+
+if [ ! -d "$HOME/.bin/" ]; then
+  mkdir "$HOME/.bin"
+fi
+
+if [ ! -f "$HOME/.zshrc" ]; then
+  touch "$HOME/.zshrc"
+fi
+
+# shellcheck disable=SC2016
+append_to_zshrc 'export PATH="$HOME/.bin:$PATH"'
+
+case "$SHELL" in
+  */zsh) : ;;
+  *)
+    fancy_echo "Changing your shell to zsh ..."
+      chsh -s "$(which zsh)"
+    ;;
+esac
+
 # Basics
+apt-get update
+apt-get upgrade
 apt install -y python-software-properties
 add-apt-repository ppa:webupd8team/java
 apt-get -f install -y virtualbox
@@ -161,7 +157,6 @@ apt-get -f install -y pgadmin3
 apt-get -f install -y dialog
 chrome_install
 zoom_install
-apt-get update
 apt-get -f install -y oracle-java8-installer
 apt-get -f install -y libpangox-1.0-0
 intellij_install
