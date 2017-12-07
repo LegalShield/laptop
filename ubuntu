@@ -143,9 +143,10 @@ intellij_install() {
   url="https://download.jetbrains.com/idea/"
   file="ideaIU-2017.3.tar.gz"
   wget "${url}${file}"
-  tar -zxvf "${file}"
+  tar -zxvf "${file}" /opt
   rm "${file}"
-  ./idea-IU-*/bin/idea.sh"
+  cp /usr/share/applications/jetbrains-idea.desktop ~/Desktop
+  chown $USER ~/Desktop/jetbrains-idea.desktop
   cd ~
 }
 
