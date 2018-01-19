@@ -72,7 +72,7 @@ postman_install() {
 
 qt_install() {
   cd /tmp
-  url="http://download.qt.io/official_releases/qt/5.7/5.7.0/"
+  url="http://download.qt.io/offitial_releases/qt/5.7/5.7.0/"
   file="qt-opensource-linux-x64-5.7.0.run"
   wget "${url}${file}"
   chmod +x ${file}
@@ -82,13 +82,7 @@ qt_install() {
 }
 
 slack_install() {
-  cd /tmp
-  url="https://downloads.slack-edge.com/linux_releases/"
-  file="slack-desktop-2.9.0-amd64.deb"
-  wget "${url}${file}"
-  dpkg -i ${file}
-  rm ${file}
-  cd ~
+    snap install slack
 }
 
 oh_my_zsh_install() {
@@ -145,8 +139,7 @@ case "$SHELL" in
 esac
 
 # Basics
-apt-get update
-apt-get upgrade
+apt-get update && apt-get dist-upgrade
 apt install -y python-software-properties
 add-apt-repository ppa:webupd8team/java
 apt-get -f install -y virtualbox
@@ -192,6 +185,7 @@ nodenv_install
 node-build_install
 apt-get -f install -y rbenv
 apt-get -f install -y ruby-build
+apt-get -f install -y ruby-rails
 
 fancy_echo "Configuring Ruby ..."
 find_latest_ruby() {
@@ -219,3 +213,6 @@ if [ -f "$HOME/.laptop.local" ]; then
   # shellcheck disable=SC1090
   . "$HOME/.laptop.local"
 fi
+
+#Final Updates
+apt-get update && apt-get dist-upgrade
