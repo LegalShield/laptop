@@ -102,7 +102,7 @@ tap "homebrew/services"
 tap "caskroom/cask"
 
 # Casks
-cask "java" unless system '/usr/libexec/java_home --failfast'
+cask "caskroom/versions/java8"
 cask "virtualbox"
 cask "alfred"
 cask "firefox"
@@ -177,6 +177,9 @@ gem update --system
 gem_install_or_update 'bundler'
 number_of_cores=$(sysctl -n hw.ncpu)
 bundle config --global jobs $((number_of_cores - 1))
+
+fancy_echo "Configuring Java ..."
+append_to_zshrc 'export JAVA_HOME=`/usr/libexec/java_home -v 1.8`' 1
 
 if [ -f "$HOME/.laptop.local" ]; then
   fancy_echo "Running your customizations from ~/.laptop.local ..."
