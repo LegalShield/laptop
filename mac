@@ -97,7 +97,6 @@ fancy_echo "Updating Homebrew formulae ..."
 brew update
 brew tap Homebrew/bundle
 brew bundle --file=- <<EOF
-tap "homebrew/dupes"
 tap "homebrew/services"
 tap "caskroom/cask"
 
@@ -107,7 +106,6 @@ cask "virtualbox"
 cask "alfred"
 cask "firefox"
 cask "google-chrome"
-cask "screenhero"
 cask "skitch"
 cask "slack"
 cask "iterm2"
@@ -119,7 +117,6 @@ cask "pg-commander"
 
 # Extra
 cask "spectacle"
-cask "karabiner"
 
 # Unix
 brew "ctags"
@@ -132,7 +129,6 @@ brew "vim", args: [ "override-system-vi" ]
 brew "zsh"
 brew "tmate"
 brew "gcc"
-brew "phantomjs"
 brew "htop"
 brew "watch"
 
