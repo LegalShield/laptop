@@ -54,7 +54,7 @@ zoom_install() {
   cd /tmp
   url="https://zoom.us/client/latest/"
   file="zoom_amd64.deb"
-  wget "${url}${file}""
+  wget "${url}${file}"
   dpkg -i $file
   rm $file
   cd ~
@@ -66,24 +66,18 @@ postman_install() {
   file="postman.tar.gz"
   wget "${url}" -O "${file}"
   tar -xzf "${file}" -C /opt
-  rm "${file}""
+  rm "${file}"
   ln -sf /opt/Postman/Postman /usr/local/bin/postman
   cd ~
 }
 
 qt_install() {
-  cd /tmp
-  url="http://download.qt.io/offitial_releases/qt/5.7/5.7.0/"
-  file="qt-opensource-linux-x64-5.7.0.run"
-  wget "${url}${file}"
-  chmod +x ${file}
-  ./${file}
-  rm ${file}
-  cd ~
+  apt-get -f install -y qtcreator
+  apt-get -f install -y qt5-default
 }
 
 slack_install() {
-    snap install slack
+    snap install slack --classic
 }
 
 oh_my_zsh_install() {
@@ -91,23 +85,24 @@ oh_my_zsh_install() {
 }
 
 nodenv_install() {
-  git clone https://github.com/nodenv/nodenv.git ~/.nodenv
-  cd ~/.nodenv && src/configure && make -C src
-  echo 'export PATH="$HOME/.nodenv/bin:$PATH"' >> ~/.zshrc
-
+  if git clone https://github.com/nodenv/nodenv.git ~/.nodenv;
+  then
+    cd ~/.nodenv && src/configure && make -C src
+    echo 'export PATH="$HOME/.nodenv/bin:$PATH"' >> ~/.zshrc
+  else
+    echo "nodenv already set"
+  fi
 }
 
 node_build_install() {
-  git clone https://github.com/nodenv/node-build.git
-  cd node-build
-  ./install.sh
-}
-
-vsCode_install() {
- apt-get -f install -y software-properties-common apt-transport-https wget
- wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
- add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
- apt-get -f install -y code
+  if git clone https://github.com/nodenv/node-build.git;
+  then
+    cd node-build
+    ./install.sh;
+    echo "node-build installed"
+  else
+    echo "node-build already installed"
+  fi
 }
 
 # shellcheck disable=SC2154
@@ -135,9 +130,9 @@ case "$SHELL" in
 esac
 
 # Basics
-apt-get update && apt-get dist-upgrade
-apt install -y python-software-properties
-add-apt-repository ppa:webupd8team/java
+apt-get update && apt-get dist-upgrade -y
+apt-get -f install -y software-properties-common
+add-apt-repository -y ppa:webupd8team/java
 apt-get -f install -y virtualbox
 apt-get -f install -y firefox
 slack_install
@@ -159,7 +154,7 @@ apt-get -f install -y tmate
 apt-get -f install -y gcc
 apt-get -f install -y phantomjs
 apt-get -f install -y htop
-#apt-get -f install -y watch (USING PROCPS)
+apt-get -f install -y watch
 postman_install
 apt-get -f install -y filezilla
 apt-get -f install -y postgresql postgresql-contrib
@@ -182,9 +177,6 @@ apt-get -f install -y rbenv
 apt-get -f install -y ruby-build
 apt-get -f install -y ruby-rails
 
-# IDEs
-vsCode_install
-
 fancy_echo "Configuring Ruby ..."
 find_latest_ruby() {
   rbenv install -l | grep -v - | tail -1 | sed -e 's/^ *//'
@@ -203,7 +195,7 @@ rbenv global "$ruby_version"
 rbenv shell "$ruby_version"
 gem update --system
 gem_install_or_update 'bundler'
-number_of_cores=$(sysctl -n hw.ncpu)
+number_of_cores=$(cat /proc/cpuinfo | grep processor | wc -l)
 bundle config --global jobs $((number_of_cores - 1))
 
 if [ -f "$HOME/.laptop.local" ]; then
