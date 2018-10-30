@@ -60,26 +60,6 @@ zoom_install() {
   cd ~
 }
 
-postman_install() {
-  cd /tmp
-  url="https://dl.pstmn.io/download/latest/linux64"
-  file="postman.tar.gz"
-  wget "${url}" -O "${file}"
-  tar -xzf "${file}" -C /opt
-  rm "${file}"
-  ln -sf /opt/Postman/Postman /usr/local/bin/postman
-  cd ~
-}
-
-qt_install() {
-  apt-get -f install -y qtcreator
-  apt-get -f install -y qt5-default
-}
-
-slack_install() {
-    snap install slack --classic
-}
-
 oh_my_zsh_install() {
   sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 }
@@ -131,11 +111,12 @@ esac
 
 # Basics
 apt-get update && apt-get dist-upgrade -y
+apt-get install snapd
 apt-get -f install -y software-properties-common
 add-apt-repository -y ppa:webupd8team/java
 apt-get -f install -y virtualbox
 apt-get -f install -y firefox
-slack_install
+snap install slack --classic
 apt-get -f install -y pgadmin3
 apt-get -f install -y dialog
 chrome_install
@@ -155,7 +136,7 @@ apt-get -f install -y gcc
 apt-get -f install -y phantomjs
 apt-get -f install -y htop
 apt-get -f install -y watch
-postman_install
+sudo snap install postman
 apt-get -f install -y filezilla
 apt-get -f install -y postgresql postgresql-contrib
 
@@ -167,7 +148,8 @@ apt-get -f install -y vagrant
 apt-get -f install -y imagemagick
 
 # Testing
-qt_install
+apt-get -f install -y qtcreator
+apt-get -f install -y qt5-default
 
 # Programming languages
 apt-get -f install -y maven
