@@ -61,7 +61,7 @@ zoom_install() {
 }
 
 oh_my_zsh_install() {
-  sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+  wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | zsh
 }
 
 nodenv_install() {
