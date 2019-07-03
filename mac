@@ -100,8 +100,11 @@ brew bundle --file=- <<EOF
 tap "homebrew/services"
 tap "caskroom/cask"
 
+# heroku cli
+tap heroku/brew
+brew "heroku"
+
 # Casks
-cask "caskroom/versions/java8"
 cask "virtualbox"
 cask "alfred"
 cask "firefox"
@@ -109,7 +112,6 @@ cask "google-chrome"
 cask "skitch"
 cask "slack"
 cask "iterm2"
-cask "skype-for-business"
 cask "macdown"
 cask "textmate"
 cask "pgadmin4"
@@ -144,13 +146,19 @@ brew "imagemagick"
 
 # Testing
 # brew "qt" # not currently supported on Sierra
+brew "geckodriver"
 
 # Programming languages
 brew "maven"
+brew cask install adoptopenjdk8
 brew "nodenv"
 brew "node-build"
 brew "rbenv"
 brew "ruby-build"
+
+# Databases
+brew "postgresql"
+brew "libpq-dev"
 EOF
 
 fancy_echo "Configuring Ruby ..."
@@ -175,7 +183,8 @@ number_of_cores=$(sysctl -n hw.ncpu)
 bundle config --global jobs $((number_of_cores - 1))
 
 fancy_echo "Configuring Java ..."
-append_to_zshrc 'export JAVA_HOME=`/usr/libexec/java_home -v 1.8`' 1
+append_to_zshrc 'export JAVA_HOME=`/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home`' 1
+append_to_zshrc 'export PATH="$JAVA_HOME/bin:$PATH"'
 
 if [ -f "$HOME/.laptop.local" ]; then
   fancy_echo "Running your customizations from ~/.laptop.local ..."
