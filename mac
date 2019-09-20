@@ -125,7 +125,7 @@ brew "openssl"
 brew "reattach-to-user-namespace"
 brew "the_silver_searcher"
 brew "tmux"
-brew "vim", args: [ "override-system-vi" ]
+brew "vim"
 brew "zsh"
 brew "tmate"
 brew "gcc"
