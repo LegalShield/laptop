@@ -98,10 +98,10 @@ brew update
 brew tap Homebrew/bundle
 brew bundle --file=- <<EOF
 tap "homebrew/services"
-tap "caskroom/cask"
+tap "AdoptOpenJDK/openjdk"
 
 # Casks
-cask "caskroom/versions/java8"
+cask "adoptopenjdk/openjdk/adoptopenjdk8"
 cask "virtualbox"
 cask "alfred"
 cask "firefox"
