@@ -146,6 +146,7 @@ brew "tmate"
 brew "gcc"
 brew "htop"
 brew "watch"
+brew "postgresql@9.6"
 
 # Docker
 cask "docker"
