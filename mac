@@ -147,6 +147,7 @@ brew "gcc"
 brew "htop"
 brew "watch"
 brew "postgresql@9.6"
+brew "elasticsearch"
 
 # Docker
 cask "docker"
