@@ -58,11 +58,26 @@ else
   sudo chown -R "$LOGNAME:admin" "$HOMEBREW_PREFIX"
 fi
 
+update_shell() {
+  local shell_path;
+  shell_path="$(command -v zsh)"
+
+  fancy_echo "Changing your shell to zsh ..."
+  if ! grep "$shell_path" /etc/shells > /dev/null 2>&1 ; then
+    fancy_echo "Adding '$shell_path' to /etc/shells"
+    sudo sh -c "echo $shell_path >> /etc/shells"
+  fi
+  sudo chsh -s "$shell_path" "$USER"
+}
+
 case "$SHELL" in
-  */zsh) : ;;
+  */zsh)
+    if [ "$(command -v zsh)" != '/usr/local/bin/zsh' ] ; then
+      update_shell
+    fi
+    ;;
   *)
-    fancy_echo "Changing your shell to zsh ..."
-      chsh -s "$(which zsh)"
+    update_shell
     ;;
 esac
 
@@ -98,11 +113,10 @@ brew update
 brew tap Homebrew/bundle
 brew bundle --file=- <<EOF
 tap "homebrew/services"
-tap "caskroom/cask"
+tap "AdoptOpenJDK/openjdk"
 
 # Casks
-cask "caskroom/versions/java8"
-cask "virtualbox"
+cask "adoptopenjdk/openjdk/adoptopenjdk8"
 cask "alfred"
 cask "firefox"
 cask "google-chrome"
@@ -114,6 +128,7 @@ cask "macdown"
 cask "textmate"
 cask "pgadmin4"
 cask "pg-commander"
+cask "visual-studio-code"
 
 # Extra
 cask "spectacle"
@@ -125,12 +140,14 @@ brew "openssl"
 brew "reattach-to-user-namespace"
 brew "the_silver_searcher"
 brew "tmux"
-brew "vim", args: [ "override-system-vi" ]
+brew "vim"
 brew "zsh"
 brew "tmate"
 brew "gcc"
 brew "htop"
 brew "watch"
+brew "postgresql@9.6"
+brew "elasticsearch"
 
 # Docker
 cask "docker"
