@@ -148,6 +148,7 @@ brew "htop"
 brew "watch"
 brew "postgresql@9.6"
 brew "elasticsearch"
+brew "redis"
 
 # Docker
 cask "docker"
