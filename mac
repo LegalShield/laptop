@@ -196,7 +196,7 @@ fancy_echo "Configuring Java ..."
 append_to_zshrc 'export JAVA_HOME=`/usr/libexec/java_home -v 1.8`' 1
 
 fancy_echo 'Adding PostgreSQL executables to PATH ...'
-append_to_zshrc 'export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH'
+append_to_zshrc 'export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"'
 
 if [ -f "$HOME/.laptop.local" ]; then
   fancy_echo "Running your customizations from ~/.laptop.local ..."
