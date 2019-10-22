@@ -181,6 +181,9 @@ ruby_version="$(find_latest_ruby)"
 append_to_zshrc 'eval "$(rbenv init - --no-rehash)"' 1
 eval "$(rbenv init -)"
 
+append_to_zshrc 'eval "$(nodenv init -)"' 1
+eval "$(nodenv init -)"
+
 if ! rbenv versions | grep -Fq "$ruby_version"; then
   RUBY_CONFIGURE_OPTS=--with-openssl-dir=/usr/local/opt/openssl rbenv install -s "$ruby_version"
 fi
