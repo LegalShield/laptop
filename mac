@@ -176,10 +176,13 @@ find_latest_ruby() {
   rbenv install -l | grep -v - | tail -1 | sed -e 's/^ *//'
 }
 
-ruby_version="$(find_latest_ruby)"
+ruby_version="2.5.1"
 # shellcheck disable=SC2016
 append_to_zshrc 'eval "$(rbenv init - --no-rehash)"' 1
 eval "$(rbenv init -)"
+
+append_to_zshrc 'eval "$(nodenv init -)"' 1
+eval "$(nodenv init -)"
 
 if ! rbenv versions | grep -Fq "$ruby_version"; then
   RUBY_CONFIGURE_OPTS=--with-openssl-dir=/usr/local/opt/openssl rbenv install -s "$ruby_version"
