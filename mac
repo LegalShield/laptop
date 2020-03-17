@@ -153,6 +153,7 @@ brew "redis"
 # Docker
 cask "docker"
 cask "vagrant"
+brew "docker-compose"
 
 # GitHub
 brew "hub"
