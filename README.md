@@ -6,7 +6,7 @@ LegalShield
 Laptop
 ======
 
-Laptop is a script to set up an macOS laptop for web development.
+Laptop is a script to set up an macOS or Ubuntu laptop for web development.
 
 It can be run multiple times on the same machine safely.
 It installs, upgrades, or skips packages
@@ -20,6 +20,7 @@ We support:
 * macOS Mavericks (10.9)
 * macOS Yosemite (10.10)
 * macOS El Capitan (10.11)
+* Ubuntu (16.04+)
 
 Older versions may work but aren't regularly tested. Bug reports for older
 versions are welcome.
@@ -29,10 +30,17 @@ Install
 
 Download, review, then execute the script:
 
+For macOS:
 ```sh
 curl --remote-name https://raw.githubusercontent.com/legalshield/laptop/master/mac
 less mac
 sh mac 2>&1 | tee ~/laptop.log
+```
+
+For Linux:
+```sh
+curl --remote-name https://raw.githubusercontent.com/thoughtbot/laptop/master/ubuntu
+sh ubuntu 2>&1 | tee ~/laptop.log
 ```
 
 Optionally, [install thoughtbot/dotfiles][dotfiles].

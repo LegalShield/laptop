@@ -1,0 +1,190 @@
+#!/bin/sh
+
+# Welcome to the legalshield laptop script for Ubuntu!
+# Be prepared to turn your laptop (or desktop, no haters here)
+# into an awesome development machine.
+# should be executable for linux
+
+fancy_echo() {
+  local fmt="$1"; shift
+
+  # shellcheck disable=SC2059
+  printf "\n$fmt\n" "$@"
+}
+
+append_to_zshrc() {
+  local text="$1" zshrc
+  local skip_new_line="${2:-0}"
+
+  if [ -w "$HOME/.zshrc.local" ]; then
+    zshrc="$HOME/.zshrc.local"
+  else
+    zshrc="$HOME/.zshrc"
+  fi
+
+  if ! grep -Fqs "$text" "$zshrc"; then
+    if [ "$skip_new_line" -eq 1 ]; then
+      printf "%s\n" "$text" >> "$zshrc"
+    else
+      printf "\n%s\n" "$text" >> "$zshrc"
+    fi
+  fi
+}
+
+gem_install_or_update() {
+  if gem list "$1" --installed > /dev/null; then
+    gem update "$@"
+  else
+    gem install "$@"
+    rbenv rehash
+  fi
+}
+
+chrome_install() {
+  cd /tmp
+  url="https://dl.google.com/linux/direct/"
+  file="google-chrome-stable_current_amd64.deb"
+  wget "${url}${file}"
+  dpkg -i $file
+  rm $file
+  cd ~
+}
+
+zoom_install() {
+  cd /tmp
+  url="https://zoom.us/client/latest/"
+  file="zoom_amd64.deb"
+  wget "${url}${file}"
+  dpkg -i $file
+  rm $file
+  cd ~
+}
+
+oh_my_zsh_install() {
+  wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | zsh
+}
+
+nodenv_install() {
+  if git clone https://github.com/nodenv/nodenv.git ~/.nodenv;
+  then
+    cd ~/.nodenv && src/configure && make -C src
+    echo 'export PATH="$HOME/.nodenv/bin:$PATH"' >> ~/.zshrc
+  else
+    echo "nodenv already set"
+  fi
+}
+
+node_build_install() {
+  if git clone https://github.com/nodenv/node-build.git;
+  then
+    cd node-build
+    ./install.sh;
+    echo "node-build installed"
+  else
+    echo "node-build already installed"
+  fi
+}
+
+# shellcheck disable=SC2154
+trap 'ret=$?; test $ret -ne 0 && printf "failed\n\n" >&2; exit $ret' EXIT
+
+set -e
+
+if [ ! -d "$HOME/.bin/" ]; then
+  mkdir "$HOME/.bin"
+fi
+
+if [ ! -f "$HOME/.zshrc" ]; then
+  touch "$HOME/.zshrc"
+fi
+
+# shellcheck disable=SC2016
+append_to_zshrc 'export PATH="$HOME/.bin:$PATH"'
+
+case "$SHELL" in
+  */zsh) : ;;
+  *)
+    fancy_echo "Changing your shell to zsh ..."
+      chsh -s "$(which zsh)"
+    ;;
+esac
+
+# Basics
+apt-get update && apt-get dist-upgrade -y
+apt-get install snapd
+apt-get -f install -y software-properties-common
+add-apt-repository -y ppa:webupd8team/java
+apt-get -f install -y virtualbox
+apt-get -f install -y firefox
+snap install slack --classic
+apt-get -f install -y pgadmin3
+apt-get -f install -y dialog
+chrome_install
+zoom_install
+apt-get -f install -y oracle-java8-installer
+apt-get -f install -y libpangox-1.0-0
+
+# Unix
+apt-get -f install -y ctags
+apt-get -f install -y git
+apt-get -f install -y openssl
+apt-get -f install -y tmux
+apt-get -f install -y zsh
+oh_my_zsh_install
+apt-get -f install -y tmate
+apt-get -f install -y gcc
+apt-get -f install -y phantomjs
+apt-get -f install -y htop
+apt-get -f install -y watch
+sudo snap install postman
+apt-get -f install -y filezilla
+apt-get -f install -y postgresql postgresql-contrib
+
+# Docker
+apt-get -f install -y docker
+apt-get -f install -y vagrant
+
+# Image manipulation
+apt-get -f install -y imagemagick
+
+# Testing
+apt-get -f install -y qtcreator
+apt-get -f install -y qt5-default
+
+# Programming languages
+apt-get -f install -y maven
+nodenv_install
+node_build_install
+apt-get -f install -y rbenv
+apt-get -f install -y ruby-build
+apt-get -f install -y ruby-rails
+
+fancy_echo "Configuring Ruby ..."
+find_latest_ruby() {
+  rbenv install -l | grep -v - | tail -1 | sed -e 's/^ *//'
+}
+
+ruby_version="$(find_latest_ruby)"
+# shellcheck disable=SC2016
+append_to_zshrc 'eval "$(rbenv init - --no-rehash)"' 1
+eval "$(rbenv init -)"
+
+if ! rbenv versions | grep -Fq "$ruby_version"; then
+  RUBY_CONFIGURE_OPTS=--with-openssl-dir=/usr/local/opt/openssl rbenv install -s "$ruby_version"
+fi
+
+rbenv global "$ruby_version"
+rbenv shell "$ruby_version"
+gem update --system
+gem_install_or_update 'bundler'
+number_of_cores=$(cat /proc/cpuinfo | grep processor | wc -l)
+bundle config --global jobs $((number_of_cores - 1))
+
+if [ -f "$HOME/.laptop.local" ]; then
+  fancy_echo "Running your customizations from ~/.laptop.local ..."
+  # shellcheck disable=SC1090
+  . "$HOME/.laptop.local"
+fi
+
+#Final Updates
+apt-get update && apt-get dist-upgrade
